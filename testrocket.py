@@ -10,16 +10,20 @@ Env = Environment(
     latitude=32.990254,
     longitude=106.974998,
     elevation=1400,
-    #datum='WGS84'
+    # datum='WGS84'
 
 )
 
 Env.setDate((tomorrow.year, tomorrow.month, tomorrow.day, 12))  # Hour given in UTC time
 
-# Tomorrow's data. Fix this dynamically later since RocketPy seems to prefer URLs for opendap
+'''
+Tomorrow's data. Fix this dynamically later since RocketPy seems to prefer URLs for opendap. NOAA dropped support 
+for https links
+'''
 DATA_URL = 'http://nomads.ncep.noaa.gov/dods/gfs_0p25/gfs20230322/gfs_0p25_06z'
 
-DICTIONARY_TYPE = ['NOAA', 'ECMWF'] # This library only supports these two types for now
+
+DICTIONARY_TYPE = ['NOAA', 'ECMWF']  # This library only supports these two types for now
 
 
 Env.setAtmosphericModel(type='Forecast', file=DATA_URL, dictionary=DICTIONARY_TYPE[0])
@@ -62,7 +66,6 @@ Surface Temperature: 281.89 K
 Surface Air Density: 1.162 kg/m³
 Surface Speed of Sound: 336.57 m/s
 '''
-
 
 
 Pro75M1670 = SolidMotor(
@@ -128,14 +131,14 @@ Tail = Calisto.addTail(
 )
 
 
-def drogueTrigger(p, y):
+def droguetrigger(p, y):
     # p = pressure
     # y = [x, y, z, vx, vy, vz, e0, e1, e2, e3, w1, w2, w3]
     # activate drogue when vz < 0 m/s.
     return True if y[5] < 0 else False
 
 
-def mainTrigger(p, y):
+def maintrigger(p, y):
     # p = pressure
     # y = [x, y, z, vx, vy, vz, e0, e1, e2, e3, w1, w2, w3]
     # activate main when vz < 0 m/s and z < 800 + 1400 m (+1400 due to surface elevation).
@@ -145,7 +148,7 @@ def mainTrigger(p, y):
 Main = Calisto.addParachute(
     "Main",
     CdS=10.0,
-    trigger=mainTrigger,
+    trigger=maintrigger,
     samplingRate=105,
     lag=1.5,
     noise=(0, 8.3, 0.5),
@@ -155,7 +158,7 @@ Main = Calisto.addParachute(
 Drogue = Calisto.addParachute(
     "Drogue",
     CdS=1.0,
-    trigger=drogueTrigger,
+    trigger=droguetrigger,
     samplingRate=105,
     lag=1.5,
     noise=(0, 8.3, 0.5),
