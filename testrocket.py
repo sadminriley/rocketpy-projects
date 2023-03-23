@@ -172,6 +172,5 @@ Calisto.parachutes.remove(Main)
 TestFlight = Flight(rocket=Calisto, environment=Env, inclination=85, heading=0)
 
 
-
 # Get all launch/flight information.
 TestFlight.allInfo()

@@ -13,10 +13,10 @@ I've included some images from the test code to give a sample of what they look 
 
 
 ### Environment forecast 
-![test_forecast_environment.png](test_forecast_environment.png)
+![test_forecast_environment.png](test_images/test_forecast_environment.png)
 
 ### Flight Trajectory
-![test_flight_trajectory.png](test_flight_trajectory.png)
+![test_flight_trajectory.png](test_images/test_flight_trajectory.png)
 
 
 ```
