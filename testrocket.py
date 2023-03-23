@@ -65,3 +65,29 @@ Surface Speed of Sound: 336.57 m/s
 
 
 
+Pro75M1670 = SolidMotor(
+    thrustSource="data/motors/Cesaroni_M1670.eng", # Reference sample data in this repo
+    burnOut=3.9,
+    grainNumber=5,
+    grainSeparation=5 / 1000,
+    grainDensity=1815,
+    grainOuterRadius=33 / 1000,
+    grainInitialInnerRadius=15 / 1000,
+    grainInitialHeight=120 / 1000,
+    nozzleRadius=33 / 1000,
+    throatRadius=11 / 1000,
+    interpolationMethod="linear",
+)
+
+
+Pro75M1670.info()
+
+'''
+Motor Details
+Total Burning Time: 3.9 s
+Total Propellant Mass: 2.956 kg
+Propellant Exhaust Velocity: 2038.745 m/s
+Average Thrust: 1545.218 N
+Maximum Thrust: 2200.0 N at 0.15 s after ignition.
+Total Impulse: 6026.350 Ns
+'''
