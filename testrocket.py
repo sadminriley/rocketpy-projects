@@ -91,3 +91,87 @@ Average Thrust: 1545.218 N
 Maximum Thrust: 2200.0 N at 0.15 s after ignition.
 Total Impulse: 6026.350 Ns
 '''
+
+
+# Add a test rocket
+
+Calisto = Rocket(
+    motor=Pro75M1670,
+    radius=127 / 2000,
+    mass=19.197 - 2.956,
+    inertiaI=6.60,
+    inertiaZ=0.0351,
+    distanceRocketNozzle=-1.255,
+    distanceRocketPropellant=-0.85704,
+    powerOffDrag="data/calisto/powerOffDragCurve.csv",
+    powerOnDrag="data/calisto/powerOnDragCurve.csv",
+)
+
+Calisto.setRailButtons([0.2, -0.5])
+
+
+NoseCone = Calisto.addNose(length=0.55829, kind="vonKarman", distanceToCM=0.71971)
+
+FinSet = Calisto.addTrapezoidalFins(
+    n=4,
+    rootChord=0.120,
+    tipChord=0.040,
+    span=0.100,
+    distanceToCM=-1.04956,
+    cantAngle=0,
+    radius=None,
+    airfoil=None,
+)
+
+Tail = Calisto.addTail(
+    topRadius=0.0635, bottomRadius=0.0435, length=0.060, distanceToCM=-1.194656
+)
+
+
+def drogueTrigger(p, y):
+    # p = pressure
+    # y = [x, y, z, vx, vy, vz, e0, e1, e2, e3, w1, w2, w3]
+    # activate drogue when vz < 0 m/s.
+    return True if y[5] < 0 else False
+
+
+def mainTrigger(p, y):
+    # p = pressure
+    # y = [x, y, z, vx, vy, vz, e0, e1, e2, e3, w1, w2, w3]
+    # activate main when vz < 0 m/s and z < 800 + 1400 m (+1400 due to surface elevation).
+    return True if y[5] < 0 and y[2] < 800 + 1400 else False
+
+
+Main = Calisto.addParachute(
+    "Main",
+    CdS=10.0,
+    trigger=mainTrigger,
+    samplingRate=105,
+    lag=1.5,
+    noise=(0, 8.3, 0.5),
+)
+
+
+Drogue = Calisto.addParachute(
+    "Drogue",
+    CdS=1.0,
+    trigger=drogueTrigger,
+    samplingRate=105,
+    lag=1.5,
+    noise=(0, 8.3, 0.5),
+)
+
+'''
+If the above addParachute function is ran multiple times, it will add multiple parachutes. 
+Can be removed with - 
+Calisto.parachutes.remove(Drogue)
+Calisto.parachutes.remove(Main)
+'''
+
+
+TestFlight = Flight(rocket=Calisto, environment=Env, inclination=85, heading=0)
+
+
+
+# Get all launch/flight information.
+TestFlight.allInfo()
